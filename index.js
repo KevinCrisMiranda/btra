@@ -19,7 +19,8 @@ let manager = new TradeOfferManager({
 	"domain": "https://localhost:3001", // Our domain is example.com
 	"language": "en",
 	"cancelTime" : 60000,
-    "pendingCancelTime" : 60000 // We want English item descriptions
+    "pendingCancelTime" : 60000,
+	"useAccessToken": true // We want English item descriptions
 });
 const steam = new SteamCommunity();
 // // Steam logon options
@@ -192,6 +193,8 @@ app.post('/retiro', verifyToken, async (req, res) => {
 		const saldoUser = await pool.query('SELECT saldo, url FROM usuarios WHERE steamid=' + id)
 		manager.getUserInventoryContents(process.env.BOTIDS, 570, 2, true, async (err, inventory) => {
 			// ERROR AL CARGAR INVENTARIO
+			console.log('FUNCA ERROR 1')
+			console.log(err)
 			const [itemsCoin, getItems] = await encontrarCoincidenciasW(inventory, otherItems, result);
 			const saldoSuficiente = saldoUser[0].saldo >= itemsCoin;
 			if (!saldoSuficiente) {
