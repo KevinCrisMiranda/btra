@@ -57,7 +57,7 @@ manager.on('sentOfferChanged',async function  (offer, oldState) {
 		// TRADE CANCELADO 
 		if (TradeOfferManager.ETradeOfferState[offer.state] === 'Declined' || TradeOfferManager.ETradeOfferState[offer.state] === 'Canceled') {
 			const result = await pool.query('SELECT u.saldo, u.depositado, o.userId, o.tipo, o.id, o.costo, (u.saldo + o.costo) AS total FROM ofertas o INNER JOIN usuarios u ON o.userId = u.steamid WHERE o.id = '+offer.id);
-			if (result[0].tipo === 'retiro') {
+			if (result[0]?.tipo === 'retiro') {
 				const {total, userId} = result[0];
 				pool.query("UPDATE usuarios Set saldo=? WHERE steamid=?", [total, userId], (err, result) => {})
 			} 
